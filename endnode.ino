@@ -28,16 +28,20 @@
 // LoRaWAN NwkSKey, network session key
 // This is the default Semtech key, which is used by the prototype TTN
 // network initially.
-static const PROGMEM u1_t NWKSKEY[16] = { };
+static const PROGMEM u1_t NWKSKEY[16] = {  };
 
 // LoRaWAN AppSKey, application session key
 // This is the default Semtech key, which is used by the prototype TTN
 // network initially.
-static const u1_t PROGMEM APPSKEY[16] = { };
+static const u1_t PROGMEM APPSKEY[16] = {  };
 
 // LoRaWAN end-device address (DevAddr)
 // See http://thethingsnetwork.org/wiki/AddressSpace
-static const u4_t DEVADDR = ; // <-- Change this address for every node!
+static const u4_t DEVADDR = 0x; // <-- Change this address for every node!
+
+int temp_lida = 0;
+float temperatura;
+
 
 // These callbacks are only used in over-the-air activation, so they are
 // left empty here (we cannot leave them out completely unless
@@ -46,7 +50,7 @@ void os_getArtEui (u1_t* buf) { }
 void os_getDevEui (u1_t* buf) { }
 void os_getDevKey (u1_t* buf) { }
 
-static uint8_t mydata[] = "3";
+static uint8_t mydata[] = { 0,0,0,0,0,0,0,0};
 static osjob_t sendjob;
 
 // Schedule TX every this many seconds (might become longer due to duty
@@ -131,14 +135,18 @@ void onEvent (ev_t ev) {
 }
 
 void do_send(osjob_t* j){
+   dtostrf(temperatura, 5, 2, (char*)mydata);
     // Check if there is not a current TX/RX job running
     if (LMIC.opmode & OP_TXRXPEND) {
         Serial.println(F("OP_TXRXPEND, not sending"));
     } else {
         // Prepare upstream data transmission at the next possible time.
-        LMIC_setTxData2(1, mydata, sizeof(mydata)-1, 0);
+       LMIC_setTxData2(1, mydata, strlen((char*) mydata), 0);
         Serial.println(F("Packet queued"));
         Serial.println(LMIC.freq);
+        Serial.print("Temperatura = ");
+    Serial.print(temperatura);
+    Serial.println(" *C");
     }
     // Next TX is scheduled after TX_COMPLETE event.
 }
@@ -197,4 +205,6 @@ Serial.println(LMIC.freq);
 void loop() 
 {
     os_runloop_once();
+    temp_lida = analogRead(0);
+    temperatura = temp_lida * 0.4887585532746823;
 }
