@@ -56,12 +56,16 @@ if (!$resultado){
     <title>TCC - LoRa</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+     <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="script.js"></script>
-    <link href="_css/login.css" rel="stylesheet">
     
+    <link href="_css/login.css" rel="stylesheet">
+     <!-- <style type="text/css">
+      #chart-container {
+        width: 640px;
+        height: auto;
+      }
+    </style> -->
 
 </head>
 <body>
@@ -123,7 +127,7 @@ if (!$resultado){
                         <h2>Hoje</h2>
                     </div>
                     <div class="panel-body text-center">
-                        <h2><?php print_r(str_replace(".", ",", $soma));?></h2>
+                        <h2 style="color: #31708f;"><?php print_r(str_replace(".", ",", $soma));?></h2>
                     </div>
                 </div>
             </div>
@@ -133,7 +137,8 @@ if (!$resultado){
                         <h2>Semana</h2>
                     </div>
                     <div class="panel-body text-center">
-                        <h2><?php print_r(str_replace(".", ",", $soma_semana));?></h2>
+                        <!-- <canvas id="chartsemana"></canvas> -->
+                        <h2 style="color: #31708f;"><?php print_r(str_replace(".", ",", $soma_semana));?></h2>
                     </div>
                 </div>
             </div>
@@ -143,22 +148,122 @@ if (!$resultado){
                         <h2>Mês</h2>
                     </div>
                     <div class="panel-body text-center">
-                        <h2><?php print_r(str_replace(".", ",", $soma_mes));?></h2>
+                        <h2 style="color: #31708f;"><?php print_r(str_replace(".", ",", $soma_mes));?></h2>
                     </div>
                 </div>
             </div>
         </div> 
     </div>
 
-    <div class="container">
-        <h2>Média Brasil</h2>
-        <div class="progress">
-            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $media_brasil ?>" aria-valuemin="0" aria-valuemax="100" 
-                style="width: <?php echo $media_brasil ?>%">
-          <?php echo (str_replace(".", ",", $media_brasil))?>%
-            </div>
+    <div class="container" style="padding-top: 50px;">
+        <div id="chart-container">
+          <canvas id="mycanvas"></canvas>
         </div>
     </div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/locale/pt-br.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+          $.ajax({
+            url: "http://localhost/projettcc2018/tcc/public/data.php",
+            method: "POST",
+            data:{
+              cliente:"<?php echo $user ?>"
+          },
+          success: function(data) {
+              console.log(data);
+              var player = [];
+              var score = [];
+              
+              for(var i in data) {
+                player.push(data[i].timestamp);
+                score.push(data[i].medicao);
+            }
+            var ctx = $("#mycanvas");
+            var myLine = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: player,
+                    datasets: [{
+                        label: 'Sua Medida',
+                        backgroundColor: '#31708f',
+                        borderColor: '#31708f',
+                        fill: false,
+                        data: score,
+                        lineTension: 0
+                    },
+                    {
+                        label: 'Média Brasil',
+                        backgroundColor: 'rgba(0,255,0,0.2)',
+                        borderColor: 'rgba(0,255,0,0.2)',
+                        fill: true,
+                        data: [1000,1000],
+                        lineTension: 0
+                    }
+                    ]
+                },
+                options: {
+                    legend: {
+                        display: true
+                    },
+                    title: {
+                        display: true,
+                        text: "Consumo nos últimos meses",
+                        fontColor:'#31708f',
+                    },
+                    scales: {
+                        xAxes: [{
+                            scaleLabel:{
+                                display:true,
+                                labelString:'Mês'
+                            }
+                        }],
+                        yAxes: [{
+                            scaleLabel:{
+                                display:true,
+                                labelString:'Litros'
+                            }
+                        }]
+                    }
+                }
+            });
+        },
+        error: function(data) {
+          console.log(data);
+        }
+  });
+      });
+    </script>
+    <!-- <script type="text/javascript">
+         var ctx2 = $("#chartsemana");
+            var myLine2 = new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Média Brasil','Sua Medida'],
+                    datasets: [{
+                        label: 'Sua Medida',
+                        backgroundColor: ['#31708f','#FF0000'],
+                        data: [1000,2000],
+                        lineTension: 0
+                    }]
+                },
+                options: {
+                    legend: {
+                        display: true
+                    },
+                    title: {
+                        display: true,
+                        text: "Consumo nos últimos meses",
+                    }
+                }
+            });
+    </script> -->
+   
 
 </body>
 </html>
