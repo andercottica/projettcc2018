@@ -37,6 +37,12 @@ session_start();
 $consulta_medicoes="SELECT medicao, timestamp FROM cliente, medicoes2 WHERE cliente.hardware_serial = medicoes2.hardware_serial 
                     AND idcliente =  $user ORDER BY timestamp DESC ";
 $resultado = mysqli_query($conecta, $consulta_medicoes);
+/*
+$data = array();
+foreach ($resultado as $row) {
+  $data[] = $row;
+}
+print json_encode($data);*/
 
 if (!$resultado){
     die("falha no banco");

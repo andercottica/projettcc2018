@@ -94,7 +94,7 @@ if (!$resultado){
 
     <div class="container" style="padding-top:80px;">
         <?php 
-            date_default_timezone_set('Etc/GMT+3');
+            date_default_timezone_set('America/Sao_Paulo');
             $today = date('d', $_SERVER['REQUEST_TIME']);
             $to_month = date('m', $_SERVER['REQUEST_TIME']);
             $soma = 0;
@@ -170,7 +170,7 @@ if (!$resultado){
     <script type="text/javascript">
         $(document).ready(function(){
           $.ajax({
-            url: "http://localhost/projettcc2018/tcc/public/data.php",
+            url: "data.php",
             method: "POST",
             data:{
               cliente:"<?php echo $user ?>"
@@ -181,7 +181,7 @@ if (!$resultado){
               var score = [];
               
               for(var i in data) {
-                player.push(data[i].timestamp);
+                player.push(data[i].dia);
                 score.push(data[i].medicao);
             }
             var ctx = $("#mycanvas");
@@ -199,10 +199,10 @@ if (!$resultado){
                     },
                     {
                         label: 'Média Brasil',
-                        backgroundColor: 'rgba(0,255,0,0.2)',
-                        borderColor: 'rgba(0,255,0,0.2)',
+                        backgroundColor: '#D9EDF7',
+                        borderColor: '#D9EDF7',
                         fill: true,
-                        data: [1000,1000],
+                        data: [400,400],
                         lineTension: 0
                     }
                     ]
@@ -213,14 +213,14 @@ if (!$resultado){
                     },
                     title: {
                         display: true,
-                        text: "Consumo nos últimos meses",
+                        text: "Consumo nos últimos 7 dias",
                         fontColor:'#31708f',
                     },
                     scales: {
                         xAxes: [{
                             scaleLabel:{
                                 display:true,
-                                labelString:'Mês'
+                                labelString:'Dias'
                             }
                         }],
                         yAxes: [{
