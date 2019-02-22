@@ -86,13 +86,13 @@ if (!$resultado){
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a href="historico.php" class="navbar-brand">TCC - LoRa</a>
+                <a href="historico.php" class="navbar-brand" style="color: #31708f;">TCC - LoRa</a>
             </div>
             <div class="navbar-collapse collapse" id="movelmenu">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="overview.php">Visão Geral</a></li>
-                    <li class="active"><a href="historico.php">Histórico</a></li>  
-                    <li><a href="logout.php">Logout</a></li>           
+                    <li><a href="overview.php" style="color: #31708f;">Visão Geral</a></li>
+                    <li class="active"><a href="historico.php" style="color: #31708f;">Histórico</a></li>  
+                    <li><a href="logout.php" style="color: #31708f;">Logout</a></li>           
                 </ul>
             </div>
         </div>
@@ -102,8 +102,8 @@ if (!$resultado){
         <table class="table table-condensed table-bordered table-hover">  
             <thead>
                 <tr class="info">
-                    <td><h2>Medida</h2></td>
-                    <td><h2>Hora</h2></td>  
+                    <td><h2 style="color: #31708f;">Medida</h2></td>
+                    <td><h2 style="color: #31708f;">Hora</h2></td>  
                 </tr>  
             </thead>    
             <?php 
@@ -111,8 +111,8 @@ if (!$resultado){
                 {
             ?>
                     <tr>
-                        <td><h3><?php echo $registro["medicao"]?></h3></td>
-                        <td><h3>
+                        <td><h3 style="color: #31708f;"><?php echo $registro["medicao"]?></h3></td>
+                        <td><h3 style="color: #31708f;">
                             <?php 
                                 $epoch = $registro["timestamp"];
                                 $dt = new DateTime("@$epoch");

@@ -56,7 +56,7 @@ if (!$resultado){
     <title>TCC - LoRa</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-     <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     
     <link href="_css/login.css" rel="stylesheet">
@@ -80,13 +80,13 @@ if (!$resultado){
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a href="historico.php" class="navbar-brand">TCC - LoRa</a>
+                <a href="historico.php" class="navbar-brand" style="color: #31708f;">TCC - LoRa</a>
             </div>
             <div class="navbar-collapse collapse" id="movelmenu">
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="active"><a href="overview.php">Visão Geral</a></li>
-                    <li><a href="historico.php">Histórico</a></li>  
-                    <li><a href="logout.php">Logout</a></li>           
+                    <li class="active"><a href="overview.php" style="color: #31708f;">Visão Geral</a></li>
+                    <li><a href="historico.php" style="color: #31708f;">Histórico</a></li>  
+                    <li><a href="logout.php" style="color: #31708f;">Logout</a></li>           
                 </ul>
             </div>
         </div>
@@ -98,8 +98,9 @@ if (!$resultado){
             $today = date('d', $_SERVER['REQUEST_TIME']);
             $to_month = date('m', $_SERVER['REQUEST_TIME']);
             $soma = 0;
-            $soma_semana = 0;
-            $soma_mes = 0;
+            $yesterday=$today-1;
+            $ontem = 0;
+            $diferenca = 0;
             //print_r($today);
             while($registro = mysqli_fetch_assoc($resultado))
             {
@@ -108,50 +109,79 @@ if (!$resultado){
                 if ($today == $day) {
                     $soma = $soma + $registro["medicao"];  
                 }
-                if ($_SERVER['REQUEST_TIME'] - $registro["timestamp"] <604800) {
+                if ($yesterday == $day && $month ==$to_month) {
+                    $ontem = $ontem + $registro["medicao"]; 
+                }
+                /*if ($_SERVER['REQUEST_TIME'] - $registro["timestamp"] <604800) {
                     $soma_semana = $soma_semana + $registro["medicao"]; 
-                }
-                if ($to_month == $month) {
+                }*/
+               /* if ($to_month == $month) {
                     $soma_mes = $soma_mes + $registro["medicao"];
-                }
+                }*/
             }
-            $media_brasil = (($soma*100)/10000);// valor de media alterado para uso com sensor de temperatura
-            $media_brasil = number_format($media_brasil, 2, '.','');
-            //print_r($media_brasil);
-            //$media_brasil = str_replace(".", ",", $media_brasil);
         ?>                     
         <div class="row"> 
             <div class="col-sm-4">      
                 <div class="panel panel-info">
                     <div class="panel-heading text-center">
-                        <h2>Hoje</h2>
+                        <h2>Ontem</h2>
+                    </div>
+                    <div class="panel-body text-center">
+                        <h2 style="color: #31708f;"><?php print_r(str_replace(".", ",", $ontem));?></h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4"> 
+                <div class="panel panel-info">
+                    <div class="panel-heading text-center">
+                        <h2>Atual</h2>
                     </div>
                     <div class="panel-body text-center">
                         <h2 style="color: #31708f;"><?php print_r(str_replace(".", ",", $soma));?></h2>
                     </div>
-                </div>
-            </div>
-            <div class="col-sm-4"> 
-                <div class="panel panel-info">
-                    <div class="panel-heading text-center">
+                   <!--  <div class="panel-heading text-center">
                         <h2>Semana</h2>
                     </div>
                     <div class="panel-body text-center">
-                        <!-- <canvas id="chartsemana"></canvas> -->
                         <h2 style="color: #31708f;"><?php print_r(str_replace(".", ",", $soma_semana));?></h2>
-                    </div>
+                    </div> -->
                 </div>
             </div>
-            <div class="col-sm-4"> 
+            <?php if (($ontem-$soma)>0) { ?>
+                <div class="col-sm-4"> 
                 <div class="panel panel-info">
                     <div class="panel-heading text-center">
+                        <h2>Saldo</h2>
+                    </div>
+                    <div class="panel-body text-center">
+                        <h2 style="color: #31708f;"><?php echo ($ontem-$soma) ?> litros a menos</h2>
+                    </div>
+                    <!-- <div class="panel-heading text-center">
                         <h2>Mês</h2>
                     </div>
                     <div class="panel-body text-center">
                         <h2 style="color: #31708f;"><?php print_r(str_replace(".", ",", $soma_mes));?></h2>
-                    </div>
+                    </div> -->
                 </div>
             </div>
+          <?php  } else { ?>
+            <div class="col-sm-4"> 
+                <div class="panel panel-danger">
+                    <div class="panel-heading text-center">
+                        <h2>Saldo</h2>
+                    </div>
+                    <div class="panel-body text-center">
+                        <h2 style="color: #31708f;"><?php echo abs($ontem-$soma) ?> litros a mais</h2>
+                    </div>
+                    <!-- <div class="panel-heading text-center">
+                        <h2>Mês</h2>
+                    </div>
+                    <div class="panel-body text-center">
+                        <h2 style="color: #31708f;"><?php print_r(str_replace(".", ",", $soma_mes));?></h2>
+                    </div> -->
+                </div>
+            </div>
+            <?php } ?>
         </div> 
     </div>
 
@@ -239,31 +269,6 @@ if (!$resultado){
   });
       });
     </script>
-    <!-- <script type="text/javascript">
-         var ctx2 = $("#chartsemana");
-            var myLine2 = new Chart(ctx2, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Média Brasil','Sua Medida'],
-                    datasets: [{
-                        label: 'Sua Medida',
-                        backgroundColor: ['#31708f','#FF0000'],
-                        data: [1000,2000],
-                        lineTension: 0
-                    }]
-                },
-                options: {
-                    legend: {
-                        display: true
-                    },
-                    title: {
-                        display: true,
-                        text: "Consumo nos últimos meses",
-                    }
-                }
-            });
-    </script> -->
-   
 
 </body>
 </html>
