@@ -154,7 +154,7 @@ if (!$resultado){
                         <h2>Saldo</h2>
                     </div>
                     <div class="panel-body text-center">
-                        <h2 style="color: #31708f;"><?php echo ($ontem-$soma) ?> litros a menos</h2>
+                        <h2 style="color: #31708f;"><?php print_r(str_replace(".", ",", ($ontem-$soma)));?> litros a menos</h2>
                     </div>
                     <!-- <div class="panel-heading text-center">
                         <h2>Mês</h2>
@@ -171,7 +171,7 @@ if (!$resultado){
                         <h2>Saldo</h2>
                     </div>
                     <div class="panel-body text-center">
-                        <h2 style="color: #31708f;"><?php echo abs($ontem-$soma) ?> litros a mais</h2>
+                        <h2 style="color: #31708f;"><?php print_r(str_replace(".", ",", abs($ontem-$soma)));?> litros a mais</h2>
                     </div>
                     <!-- <div class="panel-heading text-center">
                         <h2>Mês</h2>
