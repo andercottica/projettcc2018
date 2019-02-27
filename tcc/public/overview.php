@@ -232,7 +232,7 @@ if (!$resultado){
                         backgroundColor: '#D9EDF7',
                         borderColor: '#D9EDF7',
                         fill: true,
-                        data: [400,400],
+                        data: [400,400,400,400,400,400,400],
                         lineTension: 0
                     }
                     ]
