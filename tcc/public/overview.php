@@ -106,10 +106,10 @@ if (!$resultado){
             {
                 $day = date('d', $registro["timestamp"]);
                 $month = date('m', $registro["timestamp"]);
-                if ($today == $day) {
+                if ($today == $day && $month == $to_month) {
                     $soma = $soma + $registro["medicao"];  
                 }
-                if ($yesterday == $day && $month ==$to_month) {
+                if ($yesterday == $day && $month == $to_month) {
                     $ontem = $ontem + $registro["medicao"]; 
                 }
                 /*if ($_SERVER['REQUEST_TIME'] - $registro["timestamp"] <604800) {
