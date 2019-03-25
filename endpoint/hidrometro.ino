@@ -1,54 +1,17 @@
-/*******************************************************************************
- * Copyright (c) 2015 Thomas Telkamp and Matthijs Kooijman
- *
- * Permission is hereby granted, free of charge, to anyone
- * obtaining a copy of this document and accompanying files,
- * to do whatever they want with them without any restriction,
- * including, but not limited to, copying, modification and redistribution.
- * NO WARRANTY OF ANY KIND IS PROVIDED.
- *
- * This example sends a valid LoRaWAN packet with payload "Hello,
- * world!", using frequency and encryption settings matching those of
- * the (early prototype version of) The Things Network.
- *
- * Note: LoRaWAN per sub-band duty-cycle limitation is enforced (1% in g1,
- *  0.1% in g2).
- *
- * Change DEVADDR to a unique address!
- * See http://thethingsnetwork.org/wiki/AddressSpace
- *
- * Do not forget to define the radio type correctly in config.h.
- *
- *******************************************************************************/
+//Lora + arduino + sensor de fluxo
+//adaptação funcionando
+//02/02/2019 - 16:30
 
 #include <lmic.h>
 #include <hal/hal.h>
 #include <SPI.h>
-
 int cont = 0; // numero de litros 
-// CAPACITOR DESACOPLAMENTO 10nF
+static const PROGMEM u1_t NWKSKEY[16] = { };
 
-// LoRaWAN NwkSKey, network session key
-// This is the default Semtech key, which is used by the prototype TTN
-// network initially.
-static const PROGMEM u1_t NWKSKEY[16] = { 0x87, 0xC0, 0x6D, 0x59, 0xFA, 0x2F, 0x0E, 0x6C, 0xB5, 0xA1, 0x8C, 0x3A, 0xF9, 0x77, 0x8C, 0x13 };
+static const u1_t PROGMEM APPSKEY[16] = {  };
 
-// LoRaWAN AppSKey, application session key
-// This is the default Semtech key, which is used by the prototype TTN
-// network initially.
-static const u1_t PROGMEM APPSKEY[16] = { 0x87, 0x42, 0x79, 0xD1, 0xA1, 0x63, 0x14, 0x25, 0x4D, 0x98, 0xD9, 0x08, 0xE4, 0xEA, 0xF9, 0x25 };
+static const u4_t DEVADDR = ; 
 
-// LoRaWAN end-device address (DevAddr)
-// See http://thethingsnetwork.org/wiki/AddressSpace
-static const u4_t DEVADDR = 0x26031232; // <-- Change this address for every node!
-
-int temp_lida = 0;
-float temperatura;
-
-
-// These callbacks are only used in over-the-air activation, so they are
-// left empty here (we cannot leave them out completely unless
-// DISABLE_JOIN is set in config.h, otherwise the linker will complain).
 void os_getArtEui (u1_t* buf) { }
 void os_getDevEui (u1_t* buf) { }
 void os_getDevKey (u1_t* buf) { }
@@ -56,8 +19,6 @@ void os_getDevKey (u1_t* buf) { }
 static uint8_t mydata[] = { 0,0,0,0,0,0,0,0};
 static osjob_t sendjob;
 
-// Schedule TX every this many seconds (might become longer due to duty
-// cycle limitations).
 const unsigned TX_INTERVAL = 60;
 
 // Pin mapping... Change the pins according to microcontroller used
@@ -138,21 +99,24 @@ void onEvent (ev_t ev) {
 }
 
 void do_send(osjob_t* j){
-   dtostrf(cont, 5, 2, (char*)mydata);
+    
+    dtostrf(cont, 5, 2, (char*)mydata);
     // Check if there is not a current TX/RX job running
+    
     if (LMIC.opmode & OP_TXRXPEND) {
         Serial.println(F("OP_TXRXPEND, not sending"));
-    } else {
-        // Prepare upstream data transmission at the next possible time.
+    } 
+    
+    else {
+       // Prepare upstream data transmission at the next possible time.
        LMIC_setTxData2(1, mydata, strlen((char*) mydata), 0);
         Serial.println(F("Packet queued"));
         Serial.println(LMIC.freq);
         Serial.print("Qtde = ");
-    Serial.print(cont);
-    Serial.println(" L");
-    cont = 0;
+        Serial.print(cont);
+        Serial.println(" L");
+        cont = 0;
     }
-    // Next TX is scheduled after TX_COMPLETE event.
 }
 
 void setup() {
@@ -190,18 +154,12 @@ void setup() {
     LMIC_setSession (0x1, DEVADDR, NWKSKEY, APPSKEY);
     #endif
 
-//  for (int channel=0; channel<63; ++channel) {           // set frequency by choosing the active channel (this case 914.9Mhz = channel 63)
-//    LMIC_disableChannel(channel);
-//  }
-//  for (int channel=64; channel<72; ++channel) {          // set frequency by choosing the active channel (this case 914.9Mhz = channel 63)
-//     LMIC_disableChannel(channel);
-//  }
-
-
-//  for (int i = 1; i < 64; i++)
-//  {
-//    LMIC_disableChannel(i);  // only the first channel 902.3Mhz works now.
-//  }
+  for (int channel=0; channel<63; ++channel) {           // set frequency by choosing the active channel (this case 914.9Mhz = channel 63)
+    LMIC_disableChannel(channel);
+  }
+  for (int channel=64; channel<72; ++channel) {          // set frequency by choosing the active channel (this case 914.9Mhz = channel 63)
+     LMIC_disableChannel(channel);
+  }
 
     // Disable link check validation
     LMIC_setLinkCheckMode(0);
