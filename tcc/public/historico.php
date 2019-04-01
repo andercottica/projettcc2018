@@ -92,6 +92,7 @@ if (!$resultado){
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="overview.php" style="color: #31708f;">Visão Geral</a></li>
                     <li class="active"><a href="historico.php" style="color: #31708f;">Histórico</a></li>  
+                    <li><a href="conta.php" style="color: #31708f;">Conta</a></li>
                     <li><a href="logout.php" style="color: #31708f;">Logout</a></li>           
                 </ul>
             </div>

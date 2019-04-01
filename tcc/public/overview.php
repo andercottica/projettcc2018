@@ -27,6 +27,7 @@ print_r(json_encode($response));*/
 //-----------------------------------------------
 require_once("../conexao/conexao.php");
 session_start();
+date_default_timezone_set('America/Sao_Paulo');
 
     if ( !isset($_SESSION["user_portal"] )) {
         header("location:index.php");
@@ -86,6 +87,7 @@ if (!$resultado){
                 <ul class="nav navbar-nav navbar-right">
                     <li class="active"><a href="overview.php" style="color: #31708f;">Visão Geral</a></li>
                     <li><a href="historico.php" style="color: #31708f;">Histórico</a></li>  
+                    <li><a href="conta.php" style="color: #31708f;">Conta</a></li>
                     <li><a href="logout.php" style="color: #31708f;">Logout</a></li>           
                 </ul>
             </div>
@@ -94,7 +96,7 @@ if (!$resultado){
 
     <div class="container" style="padding-top:80px;">
         <?php 
-            date_default_timezone_set('America/Sao_Paulo');
+            
             $today = date('d', $_SERVER['REQUEST_TIME']);
             $to_month = date('m', $_SERVER['REQUEST_TIME']);
             $soma = 0;
