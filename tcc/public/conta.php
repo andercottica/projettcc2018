@@ -18,28 +18,36 @@ $consulta_medicoes="SELECT SUM(medicao) FROM cliente, medida_data WHERE cliente.
                     and mes = $to_month and ano= $year and idcliente = $user ";
 
 $resultado = mysqli_query($conecta, $consulta_medicoes);
-$registro = mysqli_fetch_assoc($resultado);
-$medida_total =$registro["SUM(medicao)"];
-
-if($medida_total=<5){
-	$conta = 34.58;
-} else if( 5 < $medida_total =< 10 ){
-	
+if (!$resultado){
+    die("falha no banco");
 }
 
-/*$data = array();
-foreach ($resultado as $row) {
-  $data[] = $row;
-}*/
-//print_r($data);
-  //print_r($today);
+$registro = mysqli_fetch_assoc($resultado);
+
+// Se não tiver medidas, o array estará vazio
+ if(!$registro["SUM(medicao)"]){
+ 	$medida_total=0;
+ } else {
+ 	$medida_total =$registro["SUM(medicao)"];
+ }
+
+if($medida_total<6){
+	$conta = 34.58;
+} else if( 6 <= $medida_total && $medida_total < 11 ){
+	$medida_total = $medida_total - 5;
+	$conta= 34.58 + ($medida_total * 1.07);	
+} else if( 11 <= $medida_total && $medida_total < 16 ){
+	$medida_total = $medida_total - 5;
+	$conta = 34.58 + 5.35 + ($medida_total * 5.96);	
+}
+
+print_r($conta);
 
 if (!$resultado){
     die("falha no banco");
 }
 
-//print_r($data);
+
  mysqli_close($conecta);
 
- //print json_encode($data);
  ?>
