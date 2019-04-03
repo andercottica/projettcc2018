@@ -35,7 +35,7 @@ session_start();
     }
 
 $consulta_medicoes="SELECT medicao, timestamp FROM cliente, medicoes2 WHERE cliente.hardware_serial = medicoes2.hardware_serial 
-                    AND idcliente =  $user ORDER BY timestamp DESC ";
+                    AND idcliente =  $user ORDER BY timestamp DESC LIMIT 10 ";
 $resultado = mysqli_query($conecta, $consulta_medicoes);
 /*
 $data = array();
