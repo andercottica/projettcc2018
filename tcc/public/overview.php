@@ -230,11 +230,11 @@ if (!$resultado){
                         lineTension: 0
                     },
                     {
-                        label: 'Média Brasil',
+                        label: 'Média ONU',
                         backgroundColor: '#D9EDF7',
                         borderColor: '#D9EDF7',
                         fill: true,
-                        data: [400,400,400,400,400,400,400],
+                        data: [110,110,110,110,110,110,110],
                         lineTension: 0
                     }
                     ]
