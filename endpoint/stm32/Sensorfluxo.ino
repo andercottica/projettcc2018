@@ -5,16 +5,16 @@
 #include <hal/hal.h>
 #include <SPI.h>
 
-static const PROGMEM u1_t NWKSKEY[16] = {  };
+static const PROGMEM u1_t NWKSKEY[16] ={ };
 
-static const u1_t PROGMEM APPSKEY[16] = {  };
+static const u1_t PROGMEM APPSKEY[16] = { };
 
 static const u4_t DEVADDR = 0x; 
 
 float fluxo;
-byte sensorInterrupt = PB4;  // 0 = digital pin 2
-byte sensorPin       = PB5;  //data sensor de fluxo
-float calibrationFactor = 4.5;
+//byte sensorInterrupt = PB5;  // 0 = digital pin 2
+//byte sensorPin       = PB4;  //data sensor de fluxo
+float calibrationFactor = 6.6;
 volatile byte pulseCount;  
 float flowRate;
 unsigned int flowMilliLitres;
@@ -135,8 +135,8 @@ void setup() {
     Serial.begin(115200);
     Serial.println(F("Starting"));
 
-    pinMode(sensorPin, INPUT);
-    digitalWrite(sensorPin, HIGH);
+    pinMode(PB4, INPUT);
+    digitalWrite(PB4, HIGH);
 
     pulseCount        = 0;
     flowRate          = 0.0;
@@ -144,7 +144,7 @@ void setup() {
     totalMilliLitres  = 0;
     oldTime           = 0;
 
-    attachInterrupt(sensorInterrupt, pulseCounter, FALLING);
+    attachInterrupt(PB4, pulseCounter, FALLING);
 
     #ifdef VCC_ENABLE
     // For Pinoccio Scout boards
@@ -196,7 +196,7 @@ void loop()
     os_runloop_once();
     
      if((millis() - oldTime) > 1000){ 
-        detachInterrupt(sensorInterrupt);
+        detachInterrupt(PB4);
         flowRate = ((1000.0 / (millis() - oldTime)) * pulseCount) / calibrationFactor;
         oldTime = millis();
         flowMilliLitres = (flowRate / 60) * 1000;
@@ -205,7 +205,7 @@ void loop()
 
         fluxo = flowRate;
     
-        attachInterrupt(sensorInterrupt, pulseCounter, FALLING);
+        attachInterrupt(PB4, pulseCounter, FALLING);
   }
 }
 
