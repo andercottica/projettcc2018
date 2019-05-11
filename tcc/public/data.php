@@ -11,14 +11,13 @@ $cliente = $_POST["cliente"];
 	if ( mysqli_connect_errno() ) {
 	    die("Conexao falhou: " . mysqli_connect_errno());
 	}
-
  $today = date('d', $_SERVER['REQUEST_TIME']);
  $to_month = date('m', $_SERVER['REQUEST_TIME']);
  $to_month = $to_month-1;
  $year = date('Y', $_SERVER['REQUEST_TIME']);
  $week = $today-7;
 $consulta_medicoes="SELECT medicao,dia FROM cliente  ,medida_data WHERE cliente.hardware_serial = medida_data.hardware_serial 
-                    and mes = $to_month and ano= $year and dia > $week and idcliente = $cliente ";
+                    and mes = $to_month and ano= $year and dia >= $week and dia<$today and idcliente = $cliente ";
 $resultado = mysqli_query($conecta, $consulta_medicoes);
 $registro = mysqli_fetch_assoc($resultado);
 

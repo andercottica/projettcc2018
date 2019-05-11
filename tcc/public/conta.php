@@ -30,6 +30,7 @@ $registro = mysqli_fetch_assoc($resultado);
  } else {
  	$medida_total =$registro["SUM(medicao)"];
  }
+$medida_total = $medida_total/1000;
 
 if($medida_total < 6){
 	$conta_agua = 34.58;
