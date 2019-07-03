@@ -17,7 +17,8 @@ $cliente = $_POST["cliente"];
  $year = date('Y', $_SERVER['REQUEST_TIME']);
  $week = $today-7;
 $consulta_medicoes="SELECT medicao,dia FROM cliente  ,medida_data WHERE cliente.hardware_serial = medida_data.hardware_serial 
-                    and mes = $to_month and ano= $year and dia >= $week and dia<$today and idcliente = $cliente ";
+                    and idcliente = $cliente ORDER BY idmedida_data DESC LIMIT 7";
+                    /* and mes = $to_month and ano= $year and dia >= $week and dia<$today and idcliente = $cliente "; */
 $resultado = mysqli_query($conecta, $consulta_medicoes);
 $registro = mysqli_fetch_assoc($resultado);
 
